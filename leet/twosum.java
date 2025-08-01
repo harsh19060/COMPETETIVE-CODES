@@ -16,7 +16,7 @@ public class twosum {
                     return out;            
                 }
             }
-        }
+        }return out;
     }
 
     static int contains(int arr[], int  t ){
