@@ -1,3 +1,5 @@
+//code by HARSHVARDHAN TALOKAR
+
 import java.util.*;
 
 class Item {
@@ -15,7 +17,7 @@ class Item {
 }
 
 public class FractionalKnapsack {
-    static final int CAPACITY = 15; 
+    static final int CAPACITY = 850; 
     static final int N = 50;
 
     static void sortByRatio(Item[] items) {
@@ -34,35 +36,24 @@ public class FractionalKnapsack {
         double totalValue = 0.0;
         int currentWeight = 0;
 
-        System.out.println("\nItem\tValue\tWeight\tTaken\t\tProfit Added\tTotal Profit");
-
         for (Item item : items) {
             if (item.weight == 0 && item.value > 0) {
                 totalValue += item.value;
-                System.out.printf("%d\t%d\t%d\tFree\t\t%.2f\t\t%.2f\n",
-                        item.index, item.value, item.weight, (double) item.value, totalValue);
                 continue;
             }
-
-            if (item.weight == 0) continue; 
+            if (item.weight == 0) continue;
 
             if (currentWeight + item.weight <= capacity) {
                 currentWeight += item.weight;
                 totalValue += item.value;
-                System.out.printf("%d\t%d\t%d\tFull\t\t%.2f\t\t%.2f\n",
-                        item.index, item.value, item.weight, (double) item.value, totalValue);
             } else {
                 int remain = capacity - currentWeight;
                 if (remain > 0) {
-                    double partialProfit = item.ratio * remain;
-                    totalValue += partialProfit;
-                    System.out.printf("%d\t%d\t%d\tPartial(%d)\t%.2f\t\t%.2f\n",
-                            item.index, item.value, item.weight, remain, partialProfit, totalValue);
+                    totalValue += item.ratio * remain; 
                 }
                 break;
             }
         }
-
         return totalValue;
     }
 
@@ -83,16 +74,25 @@ public class FractionalKnapsack {
             items[i] = new Item(i + 1, profits[i], weights[i]);
         }
 
-        System.out.println("\n--- Sorted by Ratio ---");
+        // Ratio method
         sortByRatio(items);
-        System.out.printf("Total Profit: %.2f\n", knapsack(CAPACITY, items));
+        long start = System.nanoTime();
+        double profitRatio = knapsack(CAPACITY, items);
+        long end = System.nanoTime();
+        System.out.printf("\n[Ratio Method] Total Profit: %.2f | Time: %d ns\n", profitRatio, (end - start));
 
-        System.out.println("\n--- Sorted by Profit ---");
+        // Profit method
         sortByProfit(items);
-        System.out.printf("Total Profit: %.2f\n", knapsack(CAPACITY, items));
+        start = System.nanoTime();
+        double profitMax = knapsack(CAPACITY, items);
+        end = System.nanoTime();
+        System.out.printf("[Profit Method] Total Profit: %.2f | Time: %d ns\n", profitMax, (end - start));
 
-        System.out.println("\n--- Sorted by Weight ---");
+        // Weight method
         sortByWeight(items);
-        System.out.printf("Total Profit: %.2f\n", knapsack(CAPACITY, items));
+        start = System.nanoTime();
+        double profitMinWeight = knapsack(CAPACITY, items);
+        end = System.nanoTime();
+        System.out.printf("[Weight Method] Total Profit: %.2f | Time: %d ns\n", profitMinWeight, (end - start));
     }
 }
