@@ -1,4 +1,4 @@
-package daa_ta1;
+
 
 public class que6_one {
     static double dist(int[] p1, int[] p2) {
